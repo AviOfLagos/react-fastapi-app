@@ -35,15 +35,18 @@ if [ "$1" = "nginx" -o "$1" = "nginx-debug" ]; then
 fi
 
 # Set up endpoint for env retrieval
-echo "window.ENV = {" > /usr/share/nginx/html/config.js
+#echo "window.ENV = {" > /usr/share/nginx/html/config.js
 
 # Collect enviroment variables for react
 #eval enviroment_variables="$(env | grep HNG.*=)"
 
 # Loop over variables
-env | grep HNG.*= | while read -r line; 
+#env | grep HNG.*= | while read -r line; 
+
+echo 'NODE_ENV=production\n' > .env
+env | grep REACT_APP_.*= | while read -r line; 
 do
-    printf "%s',\n" $line | sed "s/=/:'/" >> /usr/share/nginx/html/config.js
+    printf "%s\n" $line >> .env
     
     # Notify the user
     printf "Env variable %s' was injected into React App. \n" $line | sed "0,/=/{s//:'/}"
@@ -51,7 +54,7 @@ do
 done
 
 # End the object creation
-echo "}" >> /usr/share/nginx/html/config.js
+#echo "}" >> /usr/share/nginx/html/config.js
 
 echo "Enviroment Variable Injection Complete."
 
