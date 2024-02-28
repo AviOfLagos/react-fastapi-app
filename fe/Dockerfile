@@ -16,6 +16,8 @@ COPY docker-entrypoint.sh ./
 #Populate react .env with values from env
 RUN ./docker-entrypoint.sh
 
+RUN cat .env
+
 # Copy the rest of the application code
 COPY . .
 
